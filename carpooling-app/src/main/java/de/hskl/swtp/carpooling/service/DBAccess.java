@@ -1,6 +1,7 @@
 package de.hskl.swtp.carpooling.service;
 
 import de.hskl.swtp.carpooling.dto.UserRegisterDTOIn;
+import de.hskl.swtp.carpooling.dto.UserUpdateDTOIn;
 import de.hskl.swtp.carpooling.model.Offer;
 import de.hskl.swtp.carpooling.model.Position;
 import de.hskl.swtp.carpooling.model.Request;
@@ -9,25 +10,23 @@ import de.hskl.swtp.carpooling.util.PasswordTools;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
-public class UserManager {
+public class DBAccess {
 
     private final EntityManager entityManager;
 
-    public UserManager(EntityManager entityManager) {
+    public DBAccess(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
+    //Save user
     public User createUser(UserRegisterDTOIn userDto) {
         byte[] salt = PasswordTools.generateSalt();
         byte[] hash = PasswordTools.generatePasswordHash(userDto.password(), salt);
@@ -37,20 +36,6 @@ public class UserManager {
         entityManager.persist(user);
         return user;
     }
-//    public void deleteUser(int userId) {
-//        User user = entityManager.find(User.class,userId);
-//        entityManager.getTransaction().begin();
-//        entityManager.remove(user);
-//        entityManager.flush();
-//        entityManager.getTransaction().commit();
-//    }
-    public User findUserById(int id) {
-        return entityManager.find(User.class, id);
-    }
-    public Collection<User> findAllUsers() {
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
-    }
-
     public User loginUser(String username, String rawPassword) {
         byte[] salt = PasswordTools.generateSalt();
         byte[] hash = PasswordTools.generatePasswordHash(rawPassword, salt);
@@ -59,6 +44,26 @@ public class UserManager {
 //        entityManager.persist(user);
         return null;
     }
+    public User findUserById(int id) {
+        return entityManager.find(User.class, id);
+    }
+
+    public User updateUser(UserUpdateDTOIn userDto) {
+        User user=User.from(userDto);
+        return entityManager.merge(user);
+    }
+
+    public User deleteUser(User user) {
+        return entityManager.merge(user);
+    }
+    public User update(User user) {
+        return entityManager.merge(user);
+    }
+
+    public List<User> findAllUsers() {
+        return entityManager.createQuery("select u from User u", User.class).getResultList();
+    }
+
 
 
     public Optional<User> getUserById(int id) {
@@ -191,5 +196,62 @@ public class UserManager {
         return query.getResultList();
     }
 
+    public List<Offer> getOffersByUserId(int userId) {
+        TypedQuery<Offer> query = entityManager.createQuery(
+                "SELECT o FROM Offer o WHERE o.user.userId = :userId", Offer.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
 
+    public List<Offer> getActiveOffersByUserId(int userId) {
+        TypedQuery<Offer> query = entityManager.createQuery(
+                "SELECT o FROM Offer o WHERE o.user.userId = :userId AND o.startTime > CURRENT_TIMESTAMP",
+                Offer.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
+
+    public Optional<Offer> getOfferById(int offerId) {
+        return Optional.ofNullable(entityManager.find(Offer.class, offerId));
+    }
+
+    public Offer createOffer(int userId, Offer offer) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            offer.setUser(user);
+            entityManager.persist(offer);
+            return offer;
+        }
+        throw new IllegalArgumentException("User not found with ID: " + userId);
+    }
+    // ========== REQUEST-RELATED METHODS ==========
+
+    public List<Request> getRequestsByUserId(int userId) {
+        TypedQuery<Request> query = entityManager.createQuery(
+                "SELECT r FROM Request r WHERE r.user.userId = :userId", Request.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
+
+    public List<Request> getActiveRequestsByUserId(int userId) {
+        TypedQuery<Request> query = entityManager.createQuery(
+                "SELECT r FROM Request r WHERE r.user.userId = :userId AND r.startTime > CURRENT_TIMESTAMP",
+                Request.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
+
+    public Optional<Request> getRequestById(int requestId) {
+        return Optional.ofNullable(entityManager.find(Request.class, requestId));
+    }
+
+    public Request createRequest(int userId, Request request) {
+        User user = entityManager.find(User.class, userId);
+        if (user != null) {
+            request.setUser(user);
+            entityManager.persist(request);
+            return request;
+        }
+        throw new IllegalArgumentException("User not found with ID: " + userId);
+    }
 }

@@ -2,6 +2,7 @@ package de.hskl.swtp.carpooling.model;
 
 import de.hskl.swtp.carpooling.converter.PositionConverter;
 import de.hskl.swtp.carpooling.dto.UserRegisterDTOIn;
+import de.hskl.swtp.carpooling.dto.UserUpdateDTOIn;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -69,7 +70,24 @@ public class User
         return user;
     }
 
+    public static User from(UserUpdateDTOIn dto) {
+        User user = new User();
+        user.setUserId(dto.userId());
+        user.setUsername(dto.username());
+        user.setFirstname(dto.firstname());
+        user.setLastname(dto.lastname());
+        user.setPosition(dto.position());
+        user.setStreetNumber(dto.streetNumber());
+        user.setStreet(dto.street());
+        user.setZip(dto.zip());
+        user.setCity(dto.city());
+        user.setEmail(dto.email());
+        return user;
+    }
 
+    public int setUserId(int userId) {
+        return this.userId=userId;
+    }
     public int getUserId() {
         return userId;
     }

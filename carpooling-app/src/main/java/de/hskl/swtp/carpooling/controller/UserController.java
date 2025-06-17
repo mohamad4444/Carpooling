@@ -5,42 +5,35 @@ import de.hskl.swtp.carpooling.dto.UserLoginDTOIn;
 import de.hskl.swtp.carpooling.dto.UserRegisterDTOIn;
 import de.hskl.swtp.carpooling.security.SecurityManager;
 import de.hskl.swtp.carpooling.model.User;
-import de.hskl.swtp.carpooling.service.OfferManager;
-import de.hskl.swtp.carpooling.service.RequestManager;
-import de.hskl.swtp.carpooling.service.UserManager;
+import de.hskl.swtp.carpooling.service.DBAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/users")
 public class UserController
 {
     Logger log = LoggerFactory.getLogger(UserController.class);
-    private final UserManager userManager;
+    private final DBAccess dbAccess;
     private final SecurityManager securityManager;
-    private final OfferManager offerManager;
-    private final RequestManager requestManager;
 
     @Autowired
-    public UserController(UserManager noteManger, SecurityManager securityManager, OfferManager offerManager, RequestManager requestManager)
+    public UserController(DBAccess noteManger, SecurityManager securityManager)
     {
-        this.userManager = noteManger;
+        this.dbAccess = noteManger;
         this.securityManager = securityManager;
-        this.offerManager = offerManager;
-        this.requestManager = requestManager;
     }
+
     //Register
     @PostMapping("/createuser")
     public ResponseEntity<UserDtoOut> createUser(@RequestBody UserRegisterDTOIn userIn )
     {
         log.info(userIn.toString());
         log.info(userIn.position().toString());
-        User user=userManager.createUser( userIn );
+        User user= dbAccess.createUser( userIn );
         String accessToken = securityManager.createUserToken(user);
         return ResponseEntity.ok().header("Authorization", accessToken ).body( new UserDtoOut( user ) );
     }
@@ -48,7 +41,7 @@ public class UserController
     @GetMapping("/{userId}")
     public ResponseEntity<UserDtoOut> getUserById(@PathVariable int userId)
     {
-        User user = userManager.getUserById(userId).orElse(null);
+        User user = dbAccess.getUserById(userId).orElse(null);
         return ResponseEntity.ok().body( new UserDtoOut( user ) );
     }
 
@@ -58,7 +51,7 @@ public class UserController
     @PostMapping("/login")
     public ResponseEntity<UserDtoOut> loginUser(@RequestBody UserLoginDTOIn userIn )
     {
-        User user = userManager.loginUser( userIn.username(), userIn.password());
+        User user = dbAccess.loginUser( userIn.username(), userIn.password());
 
         String accessToken = securityManager.createUserToken(user);
 
