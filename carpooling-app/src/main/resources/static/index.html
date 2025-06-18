@@ -13,7 +13,7 @@
 <hr>
 <p>
     Wenn Sie noch keinen Account haben, können Sie sich hier registrieren :
-    <a href="#" onclick="document.getElementById('loginDiv').style.display='block'">Register</a>
+    <a href="#" onclick="document.getElementById('registerDiv').style.display='block'">Register</a>
 </p>
 <button onclick="document.getElementById('loginDiv').style.display='block'" style="width:auto;">Login</button>
 <div id="loginDiv" class="modal">
@@ -34,6 +34,45 @@
 
         <div class="container" style="background-color:#f1f1f1">
             <button type="button" onclick="document.getElementById('loginDiv').style.display='none'" class="cancelbtn">Cancel</button>
+        </div>
+    </div>
+</div>
+<div id="registerDiv" class="modal">
+    <div class="modal-content animate">
+        <span onclick="document.getElementById('registerDiv').style.display='none'" class="close" title="Close Modal">&times;</span>
+        <div class="container register-grid">
+            <label for="username">Benutzername</label>
+            <input type="text" id="username" placeholder="Benutzername">
+
+            <label for="password">Passwort</label>
+            <input type="password" id="password" placeholder="Passwort">
+
+            <label for="vorname">Vorname</label>
+            <input type="text" id="vorname" placeholder="Vorname">
+
+            <label for="nachname">Nachname</label>
+            <input type="text" id="nachname" placeholder="Nachname">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email">
+
+            <label for="strasse">Straße</label>
+            <input type="text" id="strasse" placeholder="Straße">
+
+            <label for="hausnummer">Hausnummer</label>
+            <input type="text" id="hausnummer" placeholder="Hausnummer">
+
+            <label for="plz">Postleitzahl</label>
+            <input type="text" id="plz" placeholder="Postleitzahl">
+
+            <label for="ort">Ort</label>
+            <input type="text" id="ort" placeholder="Wohnort">
+
+            <label></label>
+            <button id="registerBtn" type="button">Register</button>
+        </div>
+        <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('registerDiv').style.display='none'" class="cancelbtn">Cancel</button>
         </div>
     </div>
 </div>

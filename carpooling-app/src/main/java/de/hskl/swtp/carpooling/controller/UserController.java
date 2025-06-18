@@ -1,11 +1,12 @@
 package de.hskl.swtp.carpooling.controller;
 
-import de.hskl.swtp.carpooling.dto.UserDtoOut;
-import de.hskl.swtp.carpooling.dto.UserLoginDTOIn;
-import de.hskl.swtp.carpooling.dto.UserRegisterDTOIn;
+import de.hskl.swtp.carpooling.dto.*;
+import de.hskl.swtp.carpooling.model.Position;
 import de.hskl.swtp.carpooling.security.SecurityManager;
 import de.hskl.swtp.carpooling.model.User;
-import de.hskl.swtp.carpooling.service.DBAccess;
+import de.hskl.swtp.carpooling.service.UserDBAccess;
+import de.hskl.swtp.carpooling.util.AddressService;
+import de.hskl.swtp.carpooling.util.NominatimQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,16 @@ import org.springframework.web.bind.annotation.*;
 public class UserController
 {
     Logger log = LoggerFactory.getLogger(UserController.class);
-    private final DBAccess dbAccess;
+    private final UserDBAccess dbAccess;
     private final SecurityManager securityManager;
+    private final AddressService addressService;
 
     @Autowired
-    public UserController(DBAccess noteManger, SecurityManager securityManager)
+    public UserController(UserDBAccess noteManger, SecurityManager securityManager, AddressService addressService)
     {
         this.dbAccess = noteManger;
         this.securityManager = securityManager;
+        this.addressService = addressService;
     }
 
     //Register
@@ -41,7 +44,7 @@ public class UserController
     @GetMapping("/{userId}")
     public ResponseEntity<UserDtoOut> getUserById(@PathVariable int userId)
     {
-        User user = dbAccess.getUserById(userId).orElse(null);
+        User user = dbAccess.findUserById(userId);
         return ResponseEntity.ok().body( new UserDtoOut( user ) );
     }
 
@@ -89,4 +92,19 @@ public class UserController
 ////        boolean result = userManager.getUser(userId).deleteNote(noteId);
 //        return ResponseEntity.ok().body( null );
 //    }
+@PostMapping
+public ResponseEntity<PositionDtoOut> loginUser(
+        @RequestBody AddressDtoIn addressDtoIn)
+{
+    NominatimQuery geoQuery = NominatimQuery.Builder.create()
+            .street(addressDtoIn.street())
+            .streetNr(addressDtoIn.streetNumber())
+            .city(addressDtoIn.city())
+            .postalcode(addressDtoIn.postcode()).build();
+    Position position = addressService.getGeoData(geoQuery);
+    PositionDtoOut positionDtoOut =
+            new PositionDtoOut(String.valueOf(position.getLongitude()),
+                    String.valueOf(position.getLatitude()));
+    return ResponseEntity.ok().body(positionDtoOut);
+}
 }

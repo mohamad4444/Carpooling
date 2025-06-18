@@ -12,6 +12,12 @@ docker build -f Dockerfile -t swtp_carpooling_image .
 ## Ausführen im Projektverzeichnis
 ## Muss nur einmal ausgeführt werden
 
+== Remove old Images and containers ==
+docker rm -f swtpCarpooling 
+docker rmi swtp_carpooling_image
+==Build image ==
+docker build -t swtp_carpooling_image .
+
 == Starten ==
 
 docker run --name swtpCarpooling -d -p3306:3306 swtp_carpooling_image

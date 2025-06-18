@@ -1,12 +1,10 @@
 package de.hskl.swtp.carpooling.model;
 
-import de.hskl.swtp.carpooling.converter.PositionConverter;
 import de.hskl.swtp.carpooling.dto.UserRegisterDTOIn;
 import de.hskl.swtp.carpooling.dto.UserUpdateDTOIn;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name="user")
