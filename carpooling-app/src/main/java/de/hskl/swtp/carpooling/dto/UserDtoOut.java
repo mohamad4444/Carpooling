@@ -7,13 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-public record UserDtoOut(int userId, String username)
+public record UserDtoOut(int userId, String username,String fullName)
 {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-            .withLocale(Locale.GERMAN)
-            .withZone(ZoneId.systemDefault());
+
     public UserDtoOut(User user)
     {
-        this( user.getUserId(), user.getUsername() );
+        this( user.getUserId(), user.getUsername(),user.getFirstname()+" "+user.getLastname() );
     }
 }

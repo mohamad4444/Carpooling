@@ -1,17 +1,12 @@
 package de.hskl.swtp.carpooling.dto;
 
-import de.hskl.swtp.carpooling.model.Position;
+import de.hskl.swtp.carpooling.model.Address;
 
 public record UserRegisterDTOIn(
     String username,
     String password,
-    String passwordConfirm,
     String firstname,
     String lastname,
-    Position position,
-    String streetNumber,
-    String street,
-    String zip,
-    String city,
+    Address address,
     String email
 ) {}

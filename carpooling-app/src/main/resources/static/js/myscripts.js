@@ -1,6 +1,6 @@
 window.onload = function () {
-    document.getElementById("creatBtn").onclick = createNote;
-    document.getElementById("loginBtn").onclick = login;
+    // document.getElementById("creatBtn").onclick = createNote;
+    // document.getElementById("loginBtn").onclick = login;
     //showNotes();
 }
 

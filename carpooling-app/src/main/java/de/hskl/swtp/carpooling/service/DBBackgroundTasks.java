@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class DBBackgroundTasks
-{
-private final UserDBAccess dbAccess;
+public class DBBackgroundTasks {
+    private final UserDBAccess dbAccess;
 
     @Autowired
     public DBBackgroundTasks(UserDBAccess dbAccess) {
 
+        this.dbAccess = dbAccess;
     }
 
     public void closeExpiredOffersWithNoBids() {

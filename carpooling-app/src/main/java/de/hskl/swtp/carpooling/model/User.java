@@ -23,6 +23,8 @@ public Collection<User> getAllUsers(){
 })
 public class User
 {
+
+
     @Id
     @Column(name = "user_id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,10 +44,8 @@ public class User
     @Convert(converter = PositionConverter.class)
     @Column(nullable = false, columnDefinition = "GEOMETRY")
     private Position position;
-    private String streetNumber;
-    private String street;
-    private String zip;
-    private String city;
+    @Embedded
+    private Address address;
 
     @Column(unique = true)
     private String email;
@@ -64,11 +64,8 @@ public class User
         user.setUsername(dto.username());
         user.setFirstname(dto.firstname());
         user.setLastname(dto.lastname());
-        user.setPosition(dto.position());
-        user.setStreetNumber(dto.streetNumber());
-        user.setStreet(dto.street());
-        user.setZip(dto.zip());
-        user.setCity(dto.city());
+        //new Address(dto.streetNumber(), dto.street(), dto.zip(), dto.city())
+        user.setAddress(dto.address());
         user.setEmail(dto.email());
         return user;
     }
@@ -79,11 +76,7 @@ public class User
         user.setUsername(dto.username());
         user.setFirstname(dto.firstname());
         user.setLastname(dto.lastname());
-        user.setPosition(dto.position());
-        user.setStreetNumber(dto.streetNumber());
-        user.setStreet(dto.street());
-        user.setZip(dto.zip());
-        user.setCity(dto.city());
+        user.setAddress(new Address(dto.streetNumber(), dto.street(), dto.zip(), dto.city()));
         user.setEmail(dto.email());
         return user;
     }
@@ -131,38 +124,6 @@ public class User
         this.position = position;
     }
 
-    public String getStreetNumber() {
-        return streetNumber;
-    }
-
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -185,5 +146,28 @@ public class User
 
     public int getId() {
         return this.userId;
+    }
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Collection<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Collection<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public Collection<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Collection<Request> requests) {
+        this.requests = requests;
     }
 }

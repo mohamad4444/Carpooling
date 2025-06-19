@@ -83,3 +83,6 @@ body {
 .tab-content.visible {
   display: block;
 }
+#fullname{
+  color:blue;
+}

@@ -4,6 +4,7 @@ import de.hskl.swtp.carpooling.dto.*;
 import de.hskl.swtp.carpooling.model.Position;
 import de.hskl.swtp.carpooling.security.SecurityManager;
 import de.hskl.swtp.carpooling.model.User;
+import de.hskl.swtp.carpooling.util.NominatimRESTService;
 import de.hskl.swtp.carpooling.service.UserDBAccess;
 import de.hskl.swtp.carpooling.util.AddressService;
 import de.hskl.swtp.carpooling.util.NominatimQuery;
@@ -20,14 +21,12 @@ public class UserController
     Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserDBAccess dbAccess;
     private final SecurityManager securityManager;
-    private final AddressService addressService;
 
     @Autowired
-    public UserController(UserDBAccess noteManger, SecurityManager securityManager, AddressService addressService)
+    public UserController(UserDBAccess noteManger, SecurityManager securityManager)
     {
         this.dbAccess = noteManger;
         this.securityManager = securityManager;
-        this.addressService = addressService;
     }
 
     //Register
@@ -35,9 +34,10 @@ public class UserController
     public ResponseEntity<UserDtoOut> createUser(@RequestBody UserRegisterDTOIn userIn )
     {
         log.info(userIn.toString());
-        log.info(userIn.position().toString());
         User user= dbAccess.createUser( userIn );
+        log.info(user.getPosition().toString());
         String accessToken = securityManager.createUserToken(user);
+        log.info("Access token: "+accessToken);
         return ResponseEntity.ok().header("Authorization", accessToken ).body( new UserDtoOut( user ) );
     }
 
@@ -60,7 +60,18 @@ public class UserController
 
         return ResponseEntity.ok().header("Authorization", accessToken ).body( new UserDtoOut( user ) );
     }
-
+    //Profncp
+//    @PostMapping("/login")
+//    public ResponseEntity<UserDtoOut> loginUser(@RequestBody LoginDtoIn
+//                                                        loginDtoIn)
+//    {
+//        User user = dbAccess.findUserByNameAndPassword(
+//                loginDtoIn.username(), loginDtoIn.password() );
+//        String token = securityManager.createBenutzerToken(user);
+//        UserDtoOut userDtoOut = new UserDtoOut(user);
+//        return ResponseEntity.ok()
+//                .header("Authorization", token )
+//                .body(userDtoOut);
 //
 //    @GetMapping("/{userId}/requests")
 //    public ResponseEntity<List<NoteDtoOut>> getNotesFromUser(@RequestHeader("Authorization") String accessToken, @PathVariable int userId)

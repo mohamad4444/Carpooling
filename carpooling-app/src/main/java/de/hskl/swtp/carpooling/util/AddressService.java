@@ -5,7 +5,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AddressService {
+
+    private final NominatimRESTService nominatimRESTService;
+
+    public AddressService(NominatimRESTService nominatimRESTService) {
+        this.nominatimRESTService = nominatimRESTService;
+    }
+
     public Position getGeoData(NominatimQuery geoQuery) {
-        return null;
+        return nominatimRESTService.getGeoData(geoQuery);
     }
 }
