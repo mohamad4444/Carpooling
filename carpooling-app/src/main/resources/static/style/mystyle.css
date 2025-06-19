@@ -1,19 +1,57 @@
 body {
-    background-color: Wheat;
-    font-size: 20px;
-    font-family: Times;
+  background-color: Wheat;
+  font-size: 20px;
+  font-family: Times;
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
-    color: blue;
-    font-size: 30px;
-    font-family: Arial;
+  color: royalblue;
+  font-size: 30px;
+  font-family: Arial;
 }
 
-table,th,td {
-    border: 1px solid black;
+table,
+th,
+td {
+  border: 1px solid black;
 }
 
-.bigfondandhidden{
-    font:25px/1.5 "Times New Roman", Times, serif;
+
+.container {
+  padding: 20px;
+}
+
+.bar {
+  display: flex;
+  background-color: #000;
+}
+
+.tablink {
+  background-color: inherit;
+  color: white;
+  padding: 14px 16px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: background-color 0.3s;
+  font-size: 17px;
+  flex: 1;
+  text-align: center;
+}
+
+.tablink:hover {
+  background-color: #333;
+}
+
+.tablink.active {
+  background-color: red;
+}
+
+.city {
+  display: none;
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 10px;
 }
