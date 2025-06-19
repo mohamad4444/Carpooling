@@ -41,16 +41,6 @@ public class UserController
         return ResponseEntity.ok().header("Authorization", accessToken ).body( new UserDtoOut( user ) );
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserDtoOut> getUserById(@PathVariable int userId)
-    {
-        User user = dbAccess.findUserById(userId);
-        return ResponseEntity.ok().body( new UserDtoOut( user ) );
-    }
-
-
-
-
     @PostMapping("/login")
     public ResponseEntity<UserDtoOut> loginUser(@RequestBody UserLoginDTOIn userIn )
     {
@@ -60,62 +50,15 @@ public class UserController
 
         return ResponseEntity.ok().header("Authorization", accessToken ).body( new UserDtoOut( user ) );
     }
-    //Profncp
-//    @PostMapping("/login")
-//    public ResponseEntity<UserDtoOut> loginUser(@RequestBody LoginDtoIn
-//                                                        loginDtoIn)
-//    {
-//        User user = dbAccess.findUserByNameAndPassword(
-//                loginDtoIn.username(), loginDtoIn.password() );
-//        String token = securityManager.createBenutzerToken(user);
-//        UserDtoOut userDtoOut = new UserDtoOut(user);
-//        return ResponseEntity.ok()
-//                .header("Authorization", token )
-//                .body(userDtoOut);
-//
-//    @GetMapping("/{userId}/requests")
-//    public ResponseEntity<List<NoteDtoOut>> getNotesFromUser(@RequestHeader("Authorization") String accessToken, @PathVariable int userId)
-//    {
-//        securityManager.checkIfTokenIsAccepted(accessToken);
-//        securityManager.checkIfTokenIsFromUser(accessToken, userId);
-//
-////        List<Note> notes = userManager.getUserById(userId).orElse(null).getp
-////        List<NoteDtoOut> noteDtos = notes.stream().map(NoteDtoOut::new).toList();
-//        return ResponseEntity.ok().body(null);
-//    }
-//
-//    @PostMapping("/{userId}/request")
-//    public ResponseEntity<NoteDtoOut> addNoteForUser(@RequestHeader("Authorization") String accessToken, @PathVariable int userId, @RequestBody NoteDtoIn noteIn )
-//    {
-//        securityManager.checkIfTokenIsAccepted(accessToken);
-//        securityManager.checkIfTokenIsFromUser(accessToken, userId);
-//
-////        Note note = userManager.getUserById(userId).addNote( noteIn.content() );
-//        return ResponseEntity.ok().body( null );
-//    }
-//
-//    @DeleteMapping("/{userId}/offers/{noteId}")
-//    public ResponseEntity<Boolean> delteNoteFromUser(@RequestHeader("Authorization") String accessToken, @PathVariable int userId, @PathVariable int noteId )
-//    {
-//        securityManager.checkIfTokenIsAccepted(accessToken);
-//        securityManager.checkIfTokenIsFromUser(accessToken, userId);
-//
-////        boolean result = userManager.getUser(userId).deleteNote(noteId);
-//        return ResponseEntity.ok().body( null );
-//    }
-@PostMapping
-public ResponseEntity<PositionDtoOut> loginUser(
-        @RequestBody AddressDtoIn addressDtoIn)
-{
-    NominatimQuery geoQuery = NominatimQuery.Builder.create()
-            .street(addressDtoIn.street())
-            .streetNr(addressDtoIn.streetNumber())
-            .city(addressDtoIn.city())
-            .postalcode(addressDtoIn.postcode()).build();
-    Position position = addressService.getGeoData(geoQuery);
-    PositionDtoOut positionDtoOut =
-            new PositionDtoOut(String.valueOf(position.getLongitude()),
-                    String.valueOf(position.getLatitude()));
-    return ResponseEntity.ok().body(positionDtoOut);
-}
+    @DeleteMapping("/logout/{userId}")
+    public ResponseEntity<Void> logoutUser(@PathVariable int userId ,
+                                           @RequestHeader("Authorization") String accessToken){
+        log.info("Logout: userid={},accestoken={}",userId,accessToken);
+        securityManager.checkIfTokenIsAccepted(accessToken);
+        securityManager.checkIfTokenIsFromUser(accessToken, userId);
+        securityManager.removeToken(accessToken);
+        return ResponseEntity.noContent().build();  // HTTP 204
+    }
+
+
 }

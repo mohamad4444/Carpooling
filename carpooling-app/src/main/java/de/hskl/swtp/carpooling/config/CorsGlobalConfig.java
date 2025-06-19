@@ -14,7 +14,7 @@ public class CorsGlobalConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // apply to all paths
-                        .allowedOrigins("*") // allow all origins
+                        .allowedOrigins("*","null") // allow all origins
                         .allowedMethods("*") // allow all HTTP methods
                         .allowedHeaders("*") // allow all headers
                         .exposedHeaders("Authorization");

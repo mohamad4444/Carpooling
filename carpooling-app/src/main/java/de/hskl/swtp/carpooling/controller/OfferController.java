@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/offers")
 public class OfferController {
     private final OfferDBAccess dbAccess;
     private final SecurityManager securityManager;
@@ -37,6 +36,17 @@ public class OfferController {
                 .map( OfferDtoOut::new).toList();
         return ResponseEntity.ok( offerDtoOuts );
     }
+
+    @DeleteMapping("/{userId}/offers/{noteId}")
+    public ResponseEntity<Boolean> delteNoteFromUser(@RequestHeader("Authorization") String accessToken, @PathVariable int userId, @PathVariable int noteId )
+    {
+        securityManager.checkIfTokenIsAccepted(accessToken);
+        securityManager.checkIfTokenIsFromUser(accessToken, userId);
+
+//        boolean result = userManager.getUser(userId).deleteNote(noteId);
+        return ResponseEntity.ok().body( null );
+    }
+
     private void checkIsAccepted(String token)
     {
         if( !securityManager.isValid(token) )

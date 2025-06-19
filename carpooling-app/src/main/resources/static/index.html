@@ -107,7 +107,7 @@
     </div>
 
     <div id="tab-section" style="display: none" class="w3-container">
-        <p>Herzlich Willkommen <span id="fullname" >James Bond </span><button>Logout</button></p>
+        <p>Herzlich Willkommen <span id="fullname" >James Bond </span><button id="logoutBtn">Logout</button></p>
 
         <div class="tab-bar">
             <button id='angebote-tab' class="tablink active-tab" onclick="changeTab(event,'angebote')">Meine Angebote</button>
@@ -116,14 +116,72 @@
         </div>
 
         <div id="angebote" class="tab-content visible">
-            <h2>London</h2>
-            <p>London is the capital city of England.</p>
+            <h2>Meine Angebote</h2>
+            <table id="angebote-table" class="display-table">
+                <thead>
+                <tr>
+                    <th>Abfahrtszeit</th>
+                    <th>Einzugsbereich (km)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- JavaScript will dynamically fill rows here -->
+                </tbody>
+            </table>
+
+            <hr>
+
+            <h2>Neues Angebot anlegen:</h2>
+            <table class="form-table">
+                <tr>
+                    <td><label for="abfahrtszeit">Abfahrtszeit</label></td>
+                    <td><input type="datetime-local" id="abfahrtszeit"></td>
+                </tr>
+                <tr>
+                    <td><label for="einzugsbereich">Einzugsbereich (km)</label></td>
+                    <td><input type="number" id="einzugsbereich" min="1" value="5"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button id="angebotErstellenBtn" type="button">Angebot anlegen</button></td>
+                </tr>
+            </table>
         </div>
 
+
         <div id="suche" class="tab-content">
-            <h2>Paris</h2>
-            <p>Paris is the capital of France.</p>
+            <h2>Meine Suchen</h2>
+            <table id="suchen-table" class="display-table">
+                <thead>
+                <tr>
+                    <th>Abfahrtszeit</th>
+                    <th>Einzugsbereich (km)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- JavaScript will dynamically insert rows here -->
+                </tbody>
+            </table>
+
+            <hr>
+
+            <h2>Neue Suche anlegen:</h2>
+            <table class="form-table">
+                <tr>
+                    <td><label for="suche-abfahrtszeit">Abfahrtszeit</label></td>
+                    <td><input type="datetime-local" id="suche-abfahrtszeit"></td>
+                </tr>
+                <tr>
+                    <td><label for="suche-einzugsbereich">Einzugsbereich (km)</label></td>
+                    <td><input type="number" id="suche-einzugsbereich" min="1" value="5"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button id="sucheErstellenBtn" type="button">Suche anlegen</button></td>
+                </tr>
+            </table>
         </div>
+
 
         <div id="karte" class="tab-content">
             <h2>Tokyo</h2>

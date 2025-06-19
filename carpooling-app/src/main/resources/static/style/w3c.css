@@ -58,9 +58,11 @@ span.psw {
 
 .form-table {
     background-color: lightskyblue;
-    margin: 0 auto; /* Center the table inside the modal */
+    /*margin: 0 auto; /* Center the table inside the modal */
 }
-
+.display-table{
+    background-color: lightgray;
+}
 
 /* Add Zoom Animation */
 .animate {

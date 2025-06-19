@@ -3,8 +3,8 @@ window.addEventListener('DOMContentLoaded', initListener);
 function initListener() {
     document.getElementById("loginBtn")
         .addEventListener("click", apiCallLogin);
-    // document.getElementById("logoutBtn")
-    //     .addEventListener("click", apiCallLogout);
+    document.getElementById("logoutBtn")
+        .addEventListener("click", apiCallLogout);
     document.getElementById("registerBtn")
         .addEventListener("click", apiCallCreateUser);
 }
@@ -44,23 +44,48 @@ async function apiCallLogin() {
         document.getElementById("login-section").style.display = "none";
         document.getElementById("tab-section").style.display = "block";
         document.getElementById("fullname").innerText = globalFullName ;
-        await refreshData();
+        document.getElementById("loginDiv").style.display = "none";
+        //await refreshData();
     } catch (error) {
         console.error("Error:", error);
         handleError(error);
     }
 }
 
+
 async function apiCallLogout() {
-    const response = await fetch("/access/logout/" + globalUserId,
-        {
-            method: 'delete',
+    try {
+        const response = await fetch(globalUrl + "/users/logout/" + globalUserId, {
+            method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': globalToken
             }
         });
+
+        if (response.ok) {
+            console.log("Logged out successfully");
+
+            // Reset all global variables
+            globalUserId = "";
+            globalUsername = "";
+            globalToken = "";
+            globalFullName = "";
+
+            // Show login section again
+            document.getElementById("tab-section").style.display = "none";
+            document.getElementById("login-section").style.display = "block";
+            document.getElementById("loginDiv").style.display = "none";
+            document.getElementById("fullname").innerText = "";
+
+        } else {
+            throw new Error("Logout failed with status " + response.status);
+        }
+    } catch (error) {
+        console.error("Logout error:", error);
+        handleError(error);
+    }
 }
 
 async function apiCallCreateUser() {
@@ -110,7 +135,7 @@ async function apiCallCreateUser() {
         document.getElementById("login-section").style.display = "none";
         document.getElementById("tab-section").style.display = "block";
         document.getElementById("fullname").innerText = globalFullName ;
-        await refreshData();
+        //await refreshData();
     } catch (error) {
         console.error("Registration error:", error);
         alert("Fehler bei der Registrierung: " + error.message);
@@ -134,41 +159,41 @@ async function refreshData() {
 function handleError(err) {
     globalUserId = "";
     globalUsername = "";
-    logout(); // Benutzerdefinierte Funktion für den Logout
+   // apiCallLogout(); // Benutzerdefinierte Funktion für den Logout
     alert("Something went wrong! \n" + err);
 }
 
-async function showUserOffers(userId) {
-    // REST-Call auf Controller, liefert ein Array mit JSON-Objekten
-    // Benutzerdefinierte JavaScript-Funktion: apiCallOffersFromUser(userId)
-    let offers = await apiCallOffersFromUser(userId);
-    // *** Erzeugen der Tabelle mit den Suchergebnissen ***
-    // Referenz auf das div-Element ermitteln und dessen Inhalt leeren
-    let offersDiv = document.getElementById('offersContainer');
-    offersDiv.replaceChildren();
-    // Erzeugen eines Table-Knotens
-    let table = document.createElement('table');
-    // Erzeugen der Zeile mit Table-Header
-    let tableHeader = document.createElement('thead');
-    let headerNames = ["Title", "Beschreibung", "Auktionsende",
-        "Startpreis", "Aktueller Preis", "Status"];
-    headerNames.forEach(element => {
-        let td = document.createElement("td");
-        td.textContent = element;
-        tableHeader.appendChild(td);
-    });
-    table.appendChild(tableHeader);
-    offersDiv.appendChild(table);
-    // Erzeugen der Zeilen mit den JSON-Objekten
-    let attributeNames = ["title", "description", "endTime", "startingPrice",
-        "currentPrice", "status"];
-    offers.forEach((jsonObject) => {
-        let row = document.createElement("tr");
-        attributeNames.forEach(name => {
-            let td = document.createElement("td");
-            td.textContent = jsonObject[name];
-            row.appendChild(td);
-        });
-        table.appendChild(row);
-    });
-}
+// async function showUserOffers(userId) {
+//     // REST-Call auf Controller, liefert ein Array mit JSON-Objekten
+//     // Benutzerdefinierte JavaScript-Funktion: apiCallOffersFromUser(userId)
+//     let offers = await apiCallOffersFromUser(userId);
+//     // *** Erzeugen der Tabelle mit den Suchergebnissen ***
+//     // Referenz auf das div-Element ermitteln und dessen Inhalt leeren
+//     let offersDiv = document.getElementById('offersContainer');
+//     offersDiv.replaceChildren();
+//     // Erzeugen eines Table-Knotens
+//     let table = document.createElement('table');
+//     // Erzeugen der Zeile mit Table-Header
+//     let tableHeader = document.createElement('thead');
+//     let headerNames = ["Title", "Beschreibung", "Auktionsende",
+//         "Startpreis", "Aktueller Preis", "Status"];
+//     headerNames.forEach(element => {
+//         let td = document.createElement("td");
+//         td.textContent = element;
+//         tableHeader.appendChild(td);
+//     });
+//     table.appendChild(tableHeader);
+//     offersDiv.appendChild(table);
+//     // Erzeugen der Zeilen mit den JSON-Objekten
+//     let attributeNames = ["title", "description", "endTime", "startingPrice",
+//         "currentPrice", "status"];
+//     offers.forEach((jsonObject) => {
+//         let row = document.createElement("tr");
+//         attributeNames.forEach(name => {
+//             let td = document.createElement("td");
+//             td.textContent = jsonObject[name];
+//             row.appendChild(td);
+//         });
+//         table.appendChild(row);
+//     });
+// }
