@@ -3,13 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hallo</title>
     <link rel="stylesheet" href="style/mystyle.css">
     <link rel="stylesheet" href="style/w3c.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
     <script src="js/style.js"></script>
     <script src="js/myscripts.js"></script>
     <script src="js/userApiCalls.js"></script>
+    <script src="js/map.js" defer></script>
 </head>
 
 <body>
@@ -107,7 +114,7 @@
     </div>
 
     <div id="tab-section" style="display: none" class="w3-container">
-        <p>Herzlich Willkommen <span id="fullname" >James Bond </span><button id="logoutBtn">Logout</button></p>
+        <p>Herzlich Willkommen <span id="userWelcome" >James Bond </span><button id="logoutBtn">Logout</button></p>
 
         <div class="tab-bar">
             <button id='angebote-tab' class="tablink active-tab" onclick="changeTab(event,'angebote')">Meine Angebote</button>
@@ -184,8 +191,8 @@
 
 
         <div id="karte" class="tab-content">
-            <h2>Tokyo</h2>
-            <p>Tokyo is the capital of Japan.</p>
+            <h2>Benutzer</h2>
+            <div id="map" style="height: 800px; width: 800px;"></div>
         </div>
     </div>
 </body>

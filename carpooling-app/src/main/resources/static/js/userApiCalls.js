@@ -37,15 +37,18 @@ async function apiCallLogin() {
         globalUsername = result.username;
         globalFullName = result.fullName;
         globalToken = response.headers.get('Authorization');
+        console.log("token:  "+globalToken +"response: "+JSON.stringify(result));
+
         document.getElementById("username-login").value = "";
         document.getElementById("password-login").value = "";
         // Benutzerdefinierte Function, die alle Daten (Tabellen)
         // aktualisiert.
         document.getElementById("login-section").style.display = "none";
         document.getElementById("tab-section").style.display = "block";
-        document.getElementById("fullname").innerText = globalFullName ;
+        document.getElementById("userWelcome").innerText = globalFullName ;
         document.getElementById("loginDiv").style.display = "none";
-        //await refreshData();
+
+        await refreshData();
     } catch (error) {
         console.error("Error:", error);
         handleError(error);
@@ -77,7 +80,7 @@ async function apiCallLogout() {
             document.getElementById("tab-section").style.display = "none";
             document.getElementById("login-section").style.display = "block";
             document.getElementById("loginDiv").style.display = "none";
-            document.getElementById("fullname").innerText = "";
+            document.getElementById("userWelcome").innerText = "";
 
         } else {
             throw new Error("Logout failed with status " + response.status);
@@ -124,7 +127,7 @@ async function apiCallCreateUser() {
         globalUserId = result.userId;
         globalUsername = result.username;
         globalToken = response.headers.get('Authorization');
-        console.log("token:  "+globalToken + response);
+        console.log("token:  "+globalToken +"response: "+result);
         alert("Benutzer erfolgreich registriert!");
         document.getElementById('registerDiv').style.display = 'none';
 
@@ -134,7 +137,7 @@ async function apiCallCreateUser() {
         // Hide Registration/Login section and show tabs
         document.getElementById("login-section").style.display = "none";
         document.getElementById("tab-section").style.display = "block";
-        document.getElementById("fullname").innerText = globalFullName ;
+        document.getElementById("userWelcome").innerText = globalFullName ;
         //await refreshData();
     } catch (error) {
         console.error("Registration error:", error);
@@ -147,14 +150,69 @@ async function apiCallCreateOffer() {
 }
 
 async function refreshData() {
-    await showUserOffers(globalUserId);
-    await showUserBids(globalUserId);
-    await showOffersForUser(globalUserId);
-    await showAllSales();
+    // await showUserOffers(globalUserId);
+    // await showUserBids(globalUserId);
+    // await showOffersForUser(globalUserId);
+    // await showAllSales();
+    await afterLoginOrUserCreation()
     // Setzen des Begrüßungstextes
-    document.getElementById("userWellcome").innerText = globalUsername;
+    document.getElementById("userWelcome").innerText = globalFullName;
 }
 
+async function afterLoginOrUserCreation() {
+    try {
+        const users = await getUsers();  // call your existing fetch function
+
+        if (users && users.length) {
+            addUsersToMap(users, globalUserId);  // add markers on map
+        }
+
+        //await refreshData();
+
+    } catch (err) {
+        console.error("Error in afterLoginOrUserCreation:", err);
+    }
+}
+
+async function getUsers() {
+    try {
+        let response = await fetch(globalUrl+"/users", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+
+        let result = await response.json();
+        console.log(result);
+
+        return result;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+function clearUserMarkers() {
+    userMarkers.forEach(marker => map.removeLayer(marker));
+    userMarkers = [];
+}
+
+function addUsersToMap(users, currentUserId) {
+    //clearUserMarkers();
+
+    users.forEach(user => {
+        if (user.latitude && user.longitude) {
+            const icon = (user.userId === currentUserId) ? redIcon : blueIcon;
+
+            const marker = L.marker([user.latitude, user.longitude], { icon: icon })
+                .addTo(map)
+                .bindPopup(`<b>${user.username}</b>`);
+
+            userMarkers.push(marker);
+        }
+    });
+}
 // Funktion für eine einfache Fehlerbehandlung
 function handleError(err) {
     globalUserId = "";
