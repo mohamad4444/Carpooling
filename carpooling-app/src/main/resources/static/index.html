@@ -7,16 +7,14 @@
     <link rel="stylesheet" href="style/mystyle.css">
     <link rel="stylesheet" href="style/w3c.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
     <script src="js/style.js"></script>
     <script src="js/myscripts.js"></script>
 </head>
 
 <body>
-
-    <div>
-        <h1>Notiz-Demo</h1>
-        <hr>
+    <h1>Notiz-Demo</h1>
+    <hr>
+    <div id="login-section">
         <p>
             Wenn Sie noch keinen Account haben, können Sie sich hier registrieren :
             <a href="#" onclick="document.getElementById('registerDiv').style.display='block'">Register</a>
@@ -24,19 +22,24 @@
         <button onclick="document.getElementById('loginDiv').style.display='block'" style="width:auto;">Login</button>
         <div id="loginDiv" class="modal">
             <div class="modal-content animate">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('loginDiv').style.display='none'" class="close"
-                        title="Close Modal">&times;</span>
-                </div>
-
                 <div class="container">
-                    <label for="uname"><b>Username</b></label>
-                    <input id="usernameLogin" type="text" placeholder="Enter Username">
+                    <table class="form-table">
+                        <tr>
+                            <td><label for="username">Benutzername</label></td>
+                            <td><input type="text" id="username" placeholder="Benutzername"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password">Passwort</label></td>
+                            <td><input type="password" id="password" placeholder="Passwort"></td>
+                        </tr>
 
-                    <label for="psw"><b>Password</b></label>
-                    <input id="passwordLogin" type="password" placeholder="Enter Password">
-
-                    <button id="loginBtn" type="button">Login</button>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button id="loginBtn" type="button">Login</button>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="container" style="background-color:#f1f1f1">
@@ -47,9 +50,6 @@
         </div>
         <div id="registerDiv" class="modal">
             <div class="modal-content animate">
-                <span onclick="document.getElementById('registerDiv').style.display='none'" class="close"
-                    title="Close Modal">&times;</span>
-
                 <div class="container">
                     <table class="form-table">
                         <tr>
@@ -89,7 +89,8 @@
                             <td><input type="text" id="ort" placeholder="Wohnort"></td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="text-align:center;">
+                            <td></td>
+                            <td>
                                 <button id="registerBtn" type="button">Register</button>
                             </td>
                         </tr>
@@ -103,17 +104,29 @@
             </div>
         </div>
     </div>
-    <div>
 
-        <div class="w3-bar w3-black">
-            <button id="offersTabBtn" class="w3-bar-item w3-button tablink w3-red">
-                Meine Angebote</button>
-            <button id="bidsTabBtn" class="w3-bar-item w3-button tablink">
-                Meine aktuellen Gebote</button>
-            <button id="createBidTabBtn" class="w3-bar-item w3-button tablink">
-                Neues Gebot aufgeben</button>
-            <button id="salesTabBtn" class="w3-bar-item w3-button tablink">
-                Übersicht Verkäufe</button>
+    <div id="tab-section" style="display: none" class="w3-container">
+        <p>Herzlich Willkommen James Bond <button>Logout</button></p>
+
+        <div class="tab-bar">
+            <button class="tablink active-tab" onclick="changeTab(event,'angebote')">Meine Angebote</button>
+            <button class="tablink" onclick="changeTab(event,'suche')">Meine Suchen</button>
+            <button class="tablink" onclick="changeTab(event,'karte')">Benutzerübersicht</button>
+        </div>
+
+        <div id="angebote" class="tab-content visible">
+            <h2>London</h2>
+            <p>London is the capital city of England.</p>
+        </div>
+
+        <div id="suche" class="tab-content">
+            <h2>Paris</h2>
+            <p>Paris is the capital of France.</p>
+        </div>
+
+        <div id="karte" class="tab-content">
+            <h2>Tokyo</h2>
+            <p>Tokyo is the capital of Japan.</p>
         </div>
     </div>
 </body>

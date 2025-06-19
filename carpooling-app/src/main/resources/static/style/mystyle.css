@@ -15,43 +15,71 @@ h1 {
 table,
 th,
 td {
+  font-size: 12px;
   border: 1px solid black;
 }
 
-
 .container {
+  padding: 10px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+#tab-section {
   padding: 20px;
 }
 
-.bar {
+#tab-section p {
+  margin-bottom: 20px;
+}
+
+#tab-section button.logout {
+  float: right;
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.tab-bar {
   display: flex;
-  background-color: #000;
+  background-color: black;
+  gap: 4px;
+  /* Small spacing between buttons */
+  padding: 4px;
+  flex-wrap: wrap;
+  /* allow wrapping on small screens */
 }
 
 .tablink {
-  background-color: inherit;
+  padding: 10px 16px;
+  background-color: black;
   color: white;
-  padding: 14px 16px;
-  cursor: pointer;
   border: none;
-  outline: none;
+  cursor: pointer;
+  font-size: 16px;
   transition: background-color 0.3s;
-  font-size: 17px;
-  flex: 1;
-  text-align: center;
 }
 
 .tablink:hover {
   background-color: #333;
 }
 
-.tablink.active {
+.tablink.active-tab {
   background-color: red;
 }
 
-.city {
-  display: none;
+.tab-content {
+  display:none;
   border: 1px solid #ccc;
   padding: 20px;
   margin-top: 10px;
+}
+
+.tab-content.visible {
+  display: block;
 }

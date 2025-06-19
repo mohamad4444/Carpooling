@@ -3,36 +3,16 @@ body {font-family: Arial, Helvetica, sans-serif;}
 /* Full-width input fields */
 input[type=text], input[type=password],input[type=email] {
     width: 100%;
-    padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
 
-/* Set a style for all buttons 
-button {
-    background-color: #04AA6D;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-}
-*/
 button:hover {
     opacity: 0.8;
 }
 
-/* Extra styles for the cancel button 
-.cancelbtn {
-    width: auto;
-    padding: 10px 18px;
-    background-color: #f44336;
-}
-*/
-/* Center the image and position the close button */
 .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
@@ -44,9 +24,6 @@ img.avatar {
     border-radius: 50%;
 }
 
-.container {
-    padding: 16px;
-}
 
 span.psw {
     float: right;
@@ -71,10 +48,19 @@ span.psw {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    margin: 5% auto; /* Center vertically & horizontally */
     border: 1px solid #888;
-    width: 40%; /* Could be more or less, depending on screen size */
+    width: fit-content; /* Shrink to fit content */
+    max-width: 90%; /* Prevents overflow on very small screens */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
+
+.form-table {
+    background-color: lightskyblue;
+    margin: 0 auto; /* Center the table inside the modal */
+}
+
 
 /* Add Zoom Animation */
 .animate {

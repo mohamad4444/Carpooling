@@ -1,12 +1,31 @@
-window.onload = function(){
+window.onload = function () {
     document.getElementById("creatBtn").onclick = createNote;
     document.getElementById("loginBtn").onclick = login;
     //showNotes();
 }
 
+ function changeTab(evt, tabId) {
+    const contents = document.getElementsByClassName("tab-content");
+    const links = document.getElementsByClassName("tablink");
 
-async function showNotes()
-{
+    // Hide all tab contents
+    for (let i = 0; i < contents.length; i++) {
+      contents[i].classList.remove("visible");
+    }
+
+    // Remove active class from all buttons
+    for (let i = 0; i < links.length; i++) {
+      links[i].classList.remove("active-tab");
+    }
+
+    // Show selected tab content
+    document.getElementById(tabId).classList.add("visible");
+
+    // Add active class to clicked tab
+    evt.currentTarget.classList.add("active-tab");
+  }
+
+async function showNotes() {
     let notes = await getNotes();
 
     let notesDiv = document.getElementById("notes");
@@ -43,7 +62,7 @@ async function showNotes()
         let tdElementAction = document.createElement("td");
         let deleteBtn = document.createElement("button");
         deleteBtn.innerHTML = "Delete";
-        deleteBtn.onclick = function(){ deleteNote(note.id); }
+        deleteBtn.onclick = function () { deleteNote(note.id); }
         tdElementAction.appendChild(deleteBtn);
         trElement.appendChild(tdElementAction);
 
@@ -54,9 +73,8 @@ async function showNotes()
 }
 
 
-async function deleteNote(id)
-{
-    try{
+async function deleteNote(id) {
+    try {
         let response = await fetch("/notes/" + id, {
             method: "DELETE",
             headers: {
@@ -69,15 +87,13 @@ async function deleteNote(id)
         console.log(result);
         showNotes();
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
-async function getNotes()
-{
-    try{
+async function getNotes() {
+    try {
         let response = await fetch("/notes", {
             method: "GET",
             headers: {
@@ -91,15 +107,14 @@ async function getNotes()
 
         return result;
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 
 
-async function createNote(){
+async function createNote() {
 
     let inputElement = document.getElementById("notecontent");
     let noteContent = inputElement.value;
@@ -108,7 +123,7 @@ async function createNote(){
         "content": noteContent
     };
 
-    try{
+    try {
         let response = await fetch("/notes", {
             method: "POST",
             headers: {
@@ -123,8 +138,7 @@ async function createNote(){
         inputElement.value = "";
         showNotes();
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
