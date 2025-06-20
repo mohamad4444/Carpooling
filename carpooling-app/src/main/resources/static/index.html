@@ -13,10 +13,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
-    <script src="js/style.js"></script>
-    <script src="js/myscripts.js"></script>
-    <script src="js/userApiCalls.js"></script>
-    <script src="js/map.js" defer></script>
+    <script src="js/api-calls.js"></script>
+    <script src="js/data-refresh.js"></script>
+    <script src="js/event-handlers.js"></script>
+    <script src="js/showUserOffers.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ui-utils.js"></script>
+    <script src="js/map-util.js" defer></script>
 </head>
 
 <body>
@@ -162,7 +165,7 @@
                 <thead>
                 <tr>
                     <th>Abfahrtszeit</th>
-                    <th>Einzugsbereich (km)</th>
+                    <th>Gefundene Angebote</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -172,15 +175,11 @@
 
             <hr>
 
-            <h2>Neue Suche anlegen:</h2>
+            <h2>Neue Suchanfrage anlegen:</h2>
             <table class="form-table">
                 <tr>
                     <td><label for="suche-abfahrtszeit">Abfahrtszeit</label></td>
                     <td><input type="datetime-local" id="suche-abfahrtszeit"></td>
-                </tr>
-                <tr>
-                    <td><label for="suche-einzugsbereich">Einzugsbereich (km)</label></td>
-                    <td><input type="number" id="suche-einzugsbereich" min="1" value="5"></td>
                 </tr>
                 <tr>
                     <td></td>

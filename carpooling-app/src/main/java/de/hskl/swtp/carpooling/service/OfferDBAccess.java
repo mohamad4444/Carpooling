@@ -1,5 +1,6 @@
 package de.hskl.swtp.carpooling.service;
 
+import de.hskl.swtp.carpooling.dto.OfferDtoIn;
 import de.hskl.swtp.carpooling.model.Offer;
 import de.hskl.swtp.carpooling.model.Position;
 import de.hskl.swtp.carpooling.model.Request;
@@ -7,6 +8,7 @@ import de.hskl.swtp.carpooling.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 @Service
+@Transactional
 public class OfferDBAccess {
     private final EntityManager entityManager;
     public OfferDBAccess(EntityManager entityManager) {
@@ -23,14 +26,16 @@ public class OfferDBAccess {
     }
 
     /*---------------   Offer-related     ------------*/
-    public Offer createOffer(int userId, Offer offer) {
-        User user = entityManager.find(User.class, userId);
+    public Offer createOffer(User user, OfferDtoIn offerDtoIn) {
+        System.out.println("Creating offer...");
+        System.out.println(offerDtoIn.toString());
         if (user != null) {
+            Offer offer=Offer.from(offerDtoIn);
             offer.setUser(user);
             entityManager.persist(offer);
             return offer;
         }
-        throw new IllegalArgumentException("User not found with ID: " + userId);
+        throw new IllegalArgumentException("User not found with ID: " + user.getUserId());
     }
 
     public List<Integer> findOfferIdsNearby(Position position, Instant startTime) {
@@ -53,11 +58,6 @@ public class OfferDBAccess {
 
         return results;
     }
-
-
-
-
-
 
     public List<Offer> findMatchingOffersForRequest(int requestId) {
         Request request = entityManager.find(Request.class, requestId);
@@ -102,19 +102,4 @@ public class OfferDBAccess {
     public Collection<Offer> getPossibleOffersForUser(int userId) {
         return null;
     }
-    //Profnp
-//    public Collection<Offer> getAllActiveOffers()
-//    public Collection<Offer> getPossibleOffersForUser(int userId)
-//    public Offer createOffer(int userId, String title, String description,
-//                             BigDecimal startingPrice)
-//    public Offer changeState(int offerId, Offer.Status status)
-//public Bid findBidById(long bidId)
-//public Collection<Bid> getPossibleBidsForUser(int userId)
-//public Bid createBid(int userId, int offerId, BigDecimal amount)
-//public Bid updateBid(long bidId, BigDecimal newBidAmount)
-    //public Collection<Sale> getAllSales()
-    //public Sale createSale(String sellerName, String offerTitle,
-    //String buyerName, BigDecimal finalPrice )
-   // public void closeExpiredOffersWithNoBids()
-   // public void changeStateOfExpiredOffersWithBidsAndCreateSale()
 }
