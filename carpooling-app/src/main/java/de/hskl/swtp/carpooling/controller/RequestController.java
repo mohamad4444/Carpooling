@@ -84,6 +84,25 @@ public class RequestController {
 
         return ResponseEntity.ok(result);
     }
+    @DeleteMapping("/requests/{requestId}")
+    public ResponseEntity<Void> deleteRequest(
+            @PathVariable int requestId,
+            @RequestHeader("Authorization") String token) {
+        securityManager.checkIfTokenIsAccepted(token);
+
+        Request request = dbAccess.getRequestById(requestId);
+        if (request == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found");
+        }
+
+        int userIdFromToken = securityManager.getUser(token).getUserId();
+        if (request.getUser().getUserId() != userIdFromToken) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own requests");
+        }
+
+        dbAccess.deleteRequest(requestId);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

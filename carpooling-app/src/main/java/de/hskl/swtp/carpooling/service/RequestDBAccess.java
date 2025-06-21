@@ -115,4 +115,15 @@ public class RequestDBAccess {
         logger.info("Deleted {} expired requests", deletedCount);
         return deletedCount;
     }
+
+    public Request getRequestById(int requestId) {
+        return entityManager.find(Request.class, requestId);
+    }
+
+    public int deleteRequest(int requestId) {
+        String sql = "DELETE FROM request WHERE request_id = :requestId";
+        return entityManager.createNativeQuery(sql)
+                .setParameter("requestId", requestId)
+                .executeUpdate();
+    }
 }

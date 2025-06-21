@@ -1,36 +1,48 @@
 async function showUserOffers(userId) {
-    // REST-Call auf Controller, liefert ein Array mit JSON-Objekten
-    // Benutzerdefinierte JavaScript-Funktion: apiCallOffersFromUser(userId)
-    let offers = await apiCallOffersFromUser(userId);
-    // *** Erzeugen der Tabelle mit den Suchergebnissen ***
-    // Referenz auf das div-Element ermitteln und dessen Inhalt leeren
-    let offersDiv = document.getElementById('offersContainer');
-    offersDiv.replaceChildren();
-    // Erzeugen eines Table-Knotens
-    let table = document.createElement('table');
-    table.classList.add('display-table');
-    // Erzeugen der Zeile mit Table-Header
-    let tableHeader = document.createElement('thead');
-    let headerNames = [
-        "Abfahrtszeit",
-        "Einzugsbereich (km)"
-    ];
-    headerNames.forEach(element => {
-        let td = document.createElement("td");
-        td.textContent = element;
-        tableHeader.appendChild(td);
+  let offers = await apiCallOffersFromUser(userId);
+  let offersDiv = document.getElementById('offersContainer');
+  offersDiv.replaceChildren();
+
+  let table = document.createElement('table');
+  table.classList.add('display-table');
+
+  let tableHeader = document.createElement('thead');
+  let headerNames = ["Abfahrtszeit", "Einzugsbereich (km)", "Action"];
+  let headerRow = document.createElement('tr');
+  headerNames.forEach(name => {
+    let th = document.createElement('th');
+    th.textContent = name;
+    headerRow.appendChild(th);
+  });
+  tableHeader.appendChild(headerRow);
+  table.appendChild(tableHeader);
+  offersDiv.appendChild(table);
+
+  let attributeNames = ["startTime", "distance"];
+  offers.forEach((offer) => {
+    let row = document.createElement('tr');
+    attributeNames.forEach(name => {
+      let td = document.createElement('td');
+      td.textContent = offer[name];
+      row.appendChild(td);
     });
-    table.appendChild(tableHeader);
-    offersDiv.appendChild(table);
-    // Erzeugen der Zeilen mit den JSON-Objekten
-    let attributeNames = ["startTime", "distance"];
-    offers.forEach((jsonObject) => {
-        let row = document.createElement("tr");
-        attributeNames.forEach(name => {
-            let td = document.createElement("td");
-            td.textContent = jsonObject[name];
-            row.appendChild(td);
-        });
-        table.appendChild(row);
-    });
+
+    let actionTd = document.createElement('td');
+    let deleteBtn = document.createElement('button');
+    deleteBtn.textContent = "Delete";
+    deleteBtn.style.color = "red";
+    deleteBtn.onclick = async () => {
+      if (confirm("Are you sure you want to delete this offer?")) {
+        const success = await deleteOffer(offer.offerId);
+        if (success) {
+          alert("Offer deleted.");
+          await showUserOffers(userId); // refresh table
+        }
+      }
+    };
+    actionTd.appendChild(deleteBtn);
+    row.appendChild(actionTd);
+
+    table.appendChild(row);
+  });
 }

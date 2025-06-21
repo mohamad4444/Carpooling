@@ -66,4 +66,25 @@ public class OfferController {
                 .map(OfferDtoOut::new).toList();
         return ResponseEntity.ok(offerDtoOuts);
     }
+    @DeleteMapping("/offers/{offerId}")
+    public ResponseEntity<Void> deleteOffer(
+            @PathVariable int offerId,
+            @RequestHeader("Authorization") String token) {
+        securityManager.checkIfTokenIsAccepted(token);
+
+        // Verify that the offer exists and belongs to the user making the request
+        Offer offer = dbAccess.getOfferById(offerId).orElse(null);
+        if (offer == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Offer not found");
+        }
+
+        int userIdFromToken = securityManager.getUser(token).getUserId();
+        if (offer.getUser().getUserId() != userIdFromToken) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own offers");
+        }
+
+        dbAccess.deleteOffer(offerId);
+        return ResponseEntity.noContent().build();  // HTTP 204 No Content
+    }
+
 }

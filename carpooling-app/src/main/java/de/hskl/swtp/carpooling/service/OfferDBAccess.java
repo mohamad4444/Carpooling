@@ -92,4 +92,12 @@ public class OfferDBAccess {
                 .executeUpdate();
         return deletedCount;
     }
+
+    public int deleteOffer(int offerId) {
+        String sql = "DELETE FROM offer WHERE offer_id = :offerId";
+        return entityManager.createNativeQuery(sql)
+                .setParameter("offerId", offerId)
+                .executeUpdate();
+    }
+
 }

@@ -1,18 +1,34 @@
 async function apiCallLogin() {
-    let loginData =readLoginForm();
+    let loginData = readLoginForm();
     try {
-        const response = await fetch(globalUrl+"/users/login",
-            {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(loginData),
-            });
+        const response = await fetch(globalUrl + "/users/login", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData),
+        });
+
+        if (!response.ok) {
+            // Handle HTTP errors like 401 Unauthorized or 404 Not Found
+            const errorResult = await response.json();
+            console.error("Login failed:", errorResult.message || response.statusText);
+            handleError(errorResult.message || "Login failed");
+            return; // Stop further execution
+        }
+
         const result = await response.json();
-        setGlobalUserState(result,response);
-        console.log("token:  "+globalToken +"response: "+JSON.stringify(result));
+
+        // Optionally, check if the result contains a token or user info
+        if (!response.headers.get('Authorization')) {
+            console.error("Login failed: no token returned");
+            handleError("Login failed: Invalid credentials");
+            return;
+        }
+
+        setGlobalUserState(result, response);
+        console.log("token:  " + globalToken + " response: " + JSON.stringify(result));
         clearLoginForm();
         showTabSection(globalFullName);
         await refreshData();
@@ -249,5 +265,33 @@ async function deleteUser() {
     }
   } catch (error) {
     alert("Error deleting user: " + error.message);
+  }
+}
+
+async function deleteOffer(offerId) {
+  try {
+    const response = await fetch(`${globalUrl}/offers/${offerId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': globalToken }
+    });
+    if (!response.ok) throw new Error('Failed to delete offer');
+    return true;
+  } catch (err) {
+    alert("Error deleting offer: " + err.message);
+    return false;
+  }
+}
+
+async function deleteRequest(requestId) {
+  try {
+    const response = await fetch(`${globalUrl}/requests/${requestId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': globalToken }
+    });
+    if (!response.ok) throw new Error('Failed to delete request');
+    return true;
+  } catch (err) {
+    alert("Error deleting request: " + err.message);
+    return false;
   }
 }

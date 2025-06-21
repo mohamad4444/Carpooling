@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-public record MatchedOfferDtoOut(String startTimeDisplay, Instant startTimeUtc, String fullName, String email) {
+public record MatchedOfferDtoOut(int offerId,String startTimeDisplay, Instant startTimeUtc, String fullName, String email) {
     private static final DateTimeFormatter germanFormatter =
             DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
                     .withLocale(Locale.GERMAN)
@@ -16,6 +16,7 @@ public record MatchedOfferDtoOut(String startTimeDisplay, Instant startTimeUtc, 
 
     public MatchedOfferDtoOut(Offer offer) {
         this(
+                offer.getOfferId(),
                 germanFormatter.format(offer.getStartTime()), // formatted for display
                 offer.getStartTime(),                         // raw UTC Instant
                 offer.getUser().getFirstname() + " " + offer.getUser().getLastname(),
