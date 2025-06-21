@@ -119,15 +119,7 @@
 
     <div id="tab-section" style="display: none" class="w3-container">
         <p>Herzlich Willkommen <span id="userWelcome" >James Bond </span><button id="logoutBtn">Logout</button> <button id="deleteUserBtn" style="color: red;">Delete User</button></p>
-        <!-- New profile picture section -->
-        <div id="profile-picture-section" style="margin-bottom: 20px;">
-        <label for="profilePictureUpload"><strong>Profilbild:</strong></label><br>
-        <img id="profilePicturePreview" 
-            src="https://via.placeholder.com/150" 
-            alt="Profilbild" 
-            style="width:150px; height:150px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; display:block; margin-bottom: 10px;">
-        <input type="file" id="profilePictureUpload" accept="image/*">
-        </div>
+
         <div class="tab-bar">
             <button id='angebote-tab' class="tablink active-tab" onclick="changeTab(event,'angebote')">Meine Angebote</button>
             <button id='suche-tab' class="tablink" onclick="changeTab(event,'suche')">Meine Suchen</button>
