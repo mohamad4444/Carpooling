@@ -85,4 +85,11 @@ public class OfferDBAccess {
     public Collection<Offer> getPossibleOffersForUser(int userId) {
         return null;
     }
+    public int deleteExpiredOffers() {
+        String sql = "DELETE FROM offer WHERE start_time < ?";
+        int deletedCount = entityManager.createNativeQuery(sql)
+                .setParameter(1, java.sql.Timestamp.from(Instant.now()))
+                .executeUpdate();
+        return deletedCount;
+    }
 }

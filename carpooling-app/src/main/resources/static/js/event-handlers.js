@@ -9,7 +9,7 @@ function initListener() {
     document.getElementById("registerBtn").addEventListener("click", apiCallCreateUser);
     document.getElementById("angebotErstellenBtn").addEventListener("click", apiCallCreateOffer);
     document.getElementById("sucheErstellenBtn").addEventListener("click", apiCallCreateSuche);
-    
+    document.getElementById('deleteUserBtn').addEventListener('click', deleteUser);
     
 
 }

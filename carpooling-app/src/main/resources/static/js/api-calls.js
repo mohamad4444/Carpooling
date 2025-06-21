@@ -226,3 +226,28 @@ async function apiCallUserRequests() {
         return [];
     }
 }
+async function deleteUser() {
+  if (!confirm("Are you sure you want to permanently delete your user account? This action cannot be undone.")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${globalUrl}/users/${globalUserId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': globalToken,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      alert("Your user account has been deleted.");
+      window.location.reload(); 
+    } else {
+      const errorData = await response.json();
+      alert("Failed to delete user: " + (errorData.message || response.statusText));
+    }
+  } catch (error) {
+    alert("Error deleting user: " + error.message);
+  }
+}

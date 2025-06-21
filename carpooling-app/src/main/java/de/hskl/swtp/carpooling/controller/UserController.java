@@ -69,4 +69,14 @@ public class UserController {
                 .toList();
         return ResponseEntity.ok(dtos);  // HTTP 200 with users in body
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable int userId
+    , @RequestHeader("Authorization") String accessToken) {
+        securityManager.checkIfTokenIsAccepted(accessToken);
+        securityManager.checkIfTokenIsFromUser(accessToken, userId);
+        securityManager.removeToken(accessToken);
+        dbAccess.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

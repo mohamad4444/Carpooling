@@ -107,4 +107,12 @@ public class RequestDBAccess {
                 .setParameter("userId", userId)
                 .getResultList();
     }
+    public int deleteExpiredRequests() {
+        String sql = "DELETE FROM request WHERE start_time < ?";
+        int deletedCount = entityManager.createNativeQuery(sql)
+                .setParameter(1, java.sql.Timestamp.from(Instant.now()))
+                .executeUpdate();
+        logger.info("Deleted {} expired requests", deletedCount);
+        return deletedCount;
+    }
 }
