@@ -2,28 +2,45 @@ async function showUserRequestsAndMatches() {
     const container = document.getElementById('searchContainer');
     container.replaceChildren();
 
-    // Step 1: Get all requests from user
-    const requests = await apiCallUserRequests(); // expects array with startTimeDisplay and startTimeIso
+    // Get requests
+    const requests = await apiCallUserRequests();
 
     if (!requests.length) {
         container.textContent = "No requests found.";
         return;
     }
 
+    // Create table and headers
+    const table = document.createElement('table');
+    table.classList.add('display-table');
+
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+
+    const headers = ['Request Start', 'Matching Offers'];
+    headers.forEach(headerText => {
+        const th = document.createElement('th');  // use th for header cells
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    // For each request, add a row with matching offers
     for (const request of requests) {
-        // Use the ISO format from the request to get matching offers
         const offers = await apiCallMatchingOffers(request.startTimeIso);
 
-        // Create a wrapper div for this request
-        const requestDiv = document.createElement('div');
-        requestDiv.classList.add('request-block');
+        const row = document.createElement('tr');
 
-        // Display the human-friendly formatted date/time
-        const title = document.createElement('h4');
-        title.textContent = `Request Start: ${request.startTimeDisplay}`;
-        requestDiv.appendChild(title);
+        // Request start time cell
+        const requestCell = document.createElement('td');
+        requestCell.textContent = request.startTimeDisplay;
+        row.appendChild(requestCell);
 
-        // Create dropdown (select element)
+        // Matching offers cell
+        const offersCell = document.createElement('td');
         if (offers.length > 0) {
             const select = document.createElement('select');
             select.classList.add('offer-select');
@@ -31,18 +48,19 @@ async function showUserRequestsAndMatches() {
             offers.forEach((offer, index) => {
                 const option = document.createElement('option');
                 option.value = index;
-                // Assuming offer also has startTimeDisplay for UI
-                option.textContent = `Offer at ${offer.startTime}, ${offer.fullName} km, ${offer.email}`;
+                option.textContent = `Offer at ${offer.startTimeDisplay}, ${offer.fullName}, ${offer.email}`;
                 select.appendChild(option);
             });
 
-            requestDiv.appendChild(select);
+            offersCell.appendChild(select);
         } else {
-            const noMatch = document.createElement('p');
-            noMatch.textContent = "No matching offers found.";
-            requestDiv.appendChild(noMatch);
+            offersCell.textContent = "No matching offers found.";
         }
+        row.appendChild(offersCell);
 
-        container.appendChild(requestDiv);
+        tbody.appendChild(row);
     }
+
+    table.appendChild(tbody);
+    container.appendChild(table);
 }

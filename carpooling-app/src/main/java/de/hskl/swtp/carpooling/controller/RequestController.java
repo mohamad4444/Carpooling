@@ -7,6 +7,8 @@ import de.hskl.swtp.carpooling.model.User;
 import de.hskl.swtp.carpooling.security.SecurityManager;
 import de.hskl.swtp.carpooling.service.OfferDBAccess;
 import de.hskl.swtp.carpooling.service.RequestDBAccess;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class RequestController {
+    private static final Logger log = LoggerFactory.getLogger(RequestController.class);
     private final RequestDBAccess dbAccess;
     private final SecurityManager securityManager;
     @Autowired
@@ -47,14 +53,19 @@ public class RequestController {
             @RequestHeader("Authorization") String token,
             @RequestBody RequestDTOIn requestDTOIn
     ) {
-        securityManager.checkIfTokenIsAccepted(token);
-        securityManager.checkIfTokenIsFromUser(token, userId);
-        User user=securityManager.getUser(token);
+        // Log the incoming requestDTOIn startTime (assumed LocalDateTime)
+        log.info("Received startTime from client (LocalDateTime): {}", requestDTOIn.startTime());
+
         Instant instant = requestDTOIn.startTime().atZone(ZoneId.of("Europe/Berlin")).toInstant();
-        List<Offer> offers=dbAccess.findOffersWithUsersNearby(user.getPosition(),instant);
-        List<MatchedOfferDtoOut> offerDtos=offers.stream()
+        log.info("Converted to Instant (UTC): {}", instant);
+
+        List<Offer> offers = dbAccess.findOffersWithUsersNearby(securityManager.getUser(token).getPosition(), instant);
+        log.info("Found {} offers", offers.size());
+
+        List<MatchedOfferDtoOut> offerDtos = offers.stream()
                 .map(MatchedOfferDtoOut::new)
                 .toList();
+
         return ResponseEntity.ok(offerDtos);
     }
     @GetMapping("/users/{userId}/requests")

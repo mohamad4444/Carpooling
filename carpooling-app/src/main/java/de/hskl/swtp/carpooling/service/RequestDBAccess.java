@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,10 @@ public class RequestDBAccess {
 
             // Convert SQL Timestamp to Instant
             java.sql.Timestamp ts = (java.sql.Timestamp) row[1];
-            offer.setStartTime(ts.toInstant());
+            Instant instant = ts.toLocalDateTime()
+                    .atZone(ZoneId.of("UTC"))
+                    .toInstant();
+            offer.setStartTime(instant);
 
             offer.setDistance(((Number) row[2]).intValue());
 
