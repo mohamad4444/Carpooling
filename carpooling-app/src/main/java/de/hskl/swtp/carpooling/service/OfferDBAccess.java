@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -38,26 +39,8 @@ public class OfferDBAccess {
         throw new IllegalArgumentException("User not found with ID: " + user.getUserId());
     }
 
-    public List<Integer> findOfferIdsNearby(Position position, Instant startTime) {
-        Instant beginTimeInterval = startTime.minus(1, ChronoUnit.HOURS);
-        Instant endTimeInterval = startTime.plus(1, ChronoUnit.HOURS);
 
-        String sqlQueryString = "SELECT o.offer_id " +
-                "FROM user u JOIN offer o ON u.user_id = o.user_id " +
-                "WHERE (ST_Distance_Sphere(u.position, point(?, ?))/1000) <= o.distance " +
-                "AND o.start_time BETWEEN ? AND ? ";
 
-        Query sqlQuery = entityManager.createNativeQuery(sqlQueryString);
-        sqlQuery.setParameter(1, position.getLongitude());
-        sqlQuery.setParameter(2, position.getLatitude());
-        sqlQuery.setParameter(3, beginTimeInterval);
-        sqlQuery.setParameter(4, endTimeInterval);
-
-        @SuppressWarnings("unchecked")
-        List<Integer> results = sqlQuery.getResultList();
-
-        return results;
-    }
 
     public List<Offer> findMatchingOffersForRequest(int requestId) {
         Request request = entityManager.find(Request.class, requestId);

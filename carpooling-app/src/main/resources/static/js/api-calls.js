@@ -186,4 +186,43 @@ async function apiCallOffersFromUser(userId) {
     }
 }
 
+async function apiCallMatchingOffers(startTime) {
+    try {
+        const response = await fetch(`${globalUrl}/users/${globalUserId}/requests/matches`, {
+            method: 'POST', 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': globalToken
+            },
+            body: JSON.stringify({ startTime }) // include startTime in the request body
+        });
 
+        if (!response.ok) {
+            const errMsg = await response.text();
+            throw new Error(errMsg || "Fehler beim Laden der Angebote.");
+        }
+
+        return await response.json(); // returns array of MatchedOfferDtoOut
+    } catch (err) {
+        console.error("apiCallMatchingOffers error:", err);
+        alert("Angebote konnten nicht geladen werden.");
+        return [];
+    }
+}
+async function apiCallUserRequests() {
+    try {
+        const response = await fetch(`${globalUrl}/users/${globalUserId}/requests`, {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': globalToken
+            }
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+        return await response.json(); // Array of { startTime}
+    } catch (err) {
+        console.error("Error loading user requests:", err);
+        return [];
+    }
+}

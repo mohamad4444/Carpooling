@@ -4,14 +4,17 @@ async function showUserOffers(userId) {
     let offers = await apiCallOffersFromUser(userId);
     // *** Erzeugen der Tabelle mit den Suchergebnissen ***
     // Referenz auf das div-Element ermitteln und dessen Inhalt leeren
-    const tbody = document.querySelector("#angebote-table tbody");
-    tbody.replaceChildren(); // clear old rows
+    let offersDiv = document.getElementById('offersContainer');
+    offersDiv.replaceChildren();
     // Erzeugen eines Table-Knotens
     let table = document.createElement('table');
+    table.classList.add('display-table');
     // Erzeugen der Zeile mit Table-Header
     let tableHeader = document.createElement('thead');
-    let headerNames = ["Title", "Beschreibung", "Auktionsende",
-        "Startpreis", "Aktueller Preis", "Status"];
+    let headerNames = [
+        "Abfahrtszeit",
+        "Einzugsbereich (km)"
+    ];
     headerNames.forEach(element => {
         let td = document.createElement("td");
         td.textContent = element;
@@ -20,8 +23,7 @@ async function showUserOffers(userId) {
     table.appendChild(tableHeader);
     offersDiv.appendChild(table);
     // Erzeugen der Zeilen mit den JSON-Objekten
-    let attributeNames = ["title", "description", "endTime", "startingPrice",
-        "currentPrice", "status"];
+    let attributeNames = ["startTime", "distance"];
     offers.forEach((jsonObject) => {
         let row = document.createElement("tr");
         attributeNames.forEach(name => {

@@ -17,6 +17,7 @@
     <script src="js/data-refresh.js"></script>
     <script src="js/event-handlers.js"></script>
     <script src="js/showUserOffers.js"></script>
+    <script src="js/showUserRequests.js"></script>
     <script src="js/state.js"></script>
     <script src="js/ui-utils.js"></script>
     <script src="js/map-util.js" defer></script>
@@ -127,17 +128,11 @@
 
         <div id="angebote" class="tab-content visible">
             <h2>Meine Angebote</h2>
-            <table id="angebote-table" class="display-table">
-                <thead>
-                <tr>
-                    <th>Abfahrtszeit</th>
-                    <th>Einzugsbereich (km)</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- JavaScript will dynamically fill rows here -->
-                </tbody>
-            </table>
+            <div id="offersContainer">
+
+
+            </div>
+
 
             <hr>
 
@@ -161,17 +156,10 @@
 
         <div id="suche" class="tab-content">
             <h2>Meine Suchen</h2>
-            <table id="suchen-table" class="display-table">
-                <thead>
-                <tr>
-                    <th>Abfahrtszeit</th>
-                    <th>Gefundene Angebote</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- JavaScript will dynamically insert rows here -->
-                </tbody>
-            </table>
+            <div id="searchContainer">
+
+
+            </div>
 
             <hr>
 

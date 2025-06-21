@@ -1,23 +1,33 @@
 package de.hskl.swtp.carpooling.dto;
 
-import de.hskl.swtp.carpooling.model.Offer;
 import de.hskl.swtp.carpooling.model.Request;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
 public record RequestDTOOut(
-    int requestId,
-    String startTime
+        int requestId,
+        String startTimeDisplay,
+        String startTimeIso
 ) {
-    private static final DateTimeFormatter instantFormatter =
+    private static final DateTimeFormatter displayFormatter =
             DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-                    .withLocale(Locale.GERMAN)
-                    .withZone(ZoneId.systemDefault());
+                    .withLocale(Locale.GERMAN);
+
+    private static final DateTimeFormatter isoFormatter =
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
     public RequestDTOOut(Request request) {
-        this(request.getRequestId(),instantFormatter.format(request.getStartTime()));
+        this(
+                request.getRequestId(),
+                // Convert Instant to LocalDateTime in system default zone for display formatting:
+                displayFormatter.format(LocalDateTime.ofInstant(request.getStartTime(), ZoneId.systemDefault())),
+                // ISO format for sending back to frontend (also LocalDateTime in system default zone):
+                isoFormatter.format(LocalDateTime.ofInstant(request.getStartTime(), ZoneId.systemDefault()))
+        );
     }
 }
