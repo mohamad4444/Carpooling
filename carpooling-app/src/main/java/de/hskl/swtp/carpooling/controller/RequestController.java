@@ -68,7 +68,7 @@ public class RequestController {
 
         return ResponseEntity.ok(offerDtos);
     }
-    @GetMapping("/users/{userId}/requests")
+   @GetMapping("/users/{userId}/requests")
     public ResponseEntity<List<RequestDTOOut>> getUserRequests(
             @PathVariable int userId,
             @RequestHeader("Authorization") String token
@@ -80,7 +80,7 @@ public class RequestController {
 
         List<RequestDTOOut> result = requests.stream()
                 .map(RequestDTOOut::new)
-                .toList();
+                .toList() ;
 
         return ResponseEntity.ok(result);
     }

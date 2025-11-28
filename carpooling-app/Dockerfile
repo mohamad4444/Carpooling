@@ -1,5 +1,7 @@
-FROM eclipse-temurin:17-jre as runtime
-WORKDIR /app
-COPY target/carpooling-0.0.1.jar app.jar
+FROM eclipse-temurin:21-alpine
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+COPY target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "/app.jar"]

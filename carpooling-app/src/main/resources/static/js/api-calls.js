@@ -38,8 +38,6 @@ async function apiCallLogin() {
         handleError(error);
     }
 }
-
-
 async function apiCallLogout() {
     try {
         const response = await fetch(globalUrl + "/users/logout/" + globalUserId, {
@@ -63,8 +61,6 @@ async function apiCallLogout() {
         handleError(error);
     }
 }
-
-
 async function apiCallCreateUser() {
     const userData = readRegistrationForm()
     console.log("register method called");
@@ -99,7 +95,6 @@ async function apiCallCreateUser() {
         alert("Fehler bei der Registrierung: " + error.message);
     }
 }
-
 async function apiCallCreateOffer() {
     const offerData = readAngebotForm();
 
@@ -158,8 +153,6 @@ async function apiCallCreateSuche() {
         alert("Fehler beim Anlegen der Suche: " + error.message);
     }
 }
-
-
 async function getUsers() {
     try {
         let response = await fetch(globalUrl+"/users", {
@@ -201,7 +194,6 @@ async function apiCallOffersFromUser(userId) {
         return [];
     }
 }
-
 async function apiCallMatchingOffers(startTime) {
     try {
         const response = await fetch(`${globalUrl}/users/${globalUserId}/requests/matches`, {
@@ -267,7 +259,6 @@ async function deleteUser() {
     alert("Error deleting user: " + error.message);
   }
 }
-
 async function deleteOffer(offerId) {
   try {
     const response = await fetch(`${globalUrl}/offers/${offerId}`, {
@@ -281,7 +272,6 @@ async function deleteOffer(offerId) {
     return false;
   }
 }
-
 async function deleteRequest(requestId) {
   try {
     const response = await fetch(`${globalUrl}/requests/${requestId}`, {
