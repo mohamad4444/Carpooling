@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RideShare</title>
+    <link rel="stylesheet" href="style/mystyle.css">
+    <link rel="stylesheet" href="style/w3c.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="js/api-calls.js"></script>
+    <script src="js/data-refresh.js"></script>
+    <script src="js/event-handlers.js"></script>
+    <script src="js/showUserOffers.js"></script>
+    <script src="js/showUserRequests.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ui-utils.js"></script>
+    <script src="js/map-util.js" defer></script>
+</head>
+
+<body>
+    <h1>RideShare</h1>
+    <hr>
+    <div id="login-section">
+        <p>
+            Wenn Sie noch keinen Account haben, können Sie sich hier registrieren :
+            <a href="#" onclick="document.getElementById('registerDiv').style.display='block'">Register</a>
+        </p>
+        <button onclick="document.getElementById('loginDiv').style.display='block'" style="width:auto;">Login</button>
+        <div id="loginDiv" class="modal">
+            <div class="modal-content animate">
+                <div class="container">
+                    <table class="form-table">
+                        <tr>
+                            <td><label for="username-login">Benutzername</label></td>
+                            <td><input type="text" id="username-login" placeholder="Benutzername"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password-login">Passwort</label></td>
+                            <td><input type="password" id="password-login" placeholder="Passwort"></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button id="loginBtn" type="button">Login</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="container" style="background-color:#f1f1f1">
+                    <button type="button" onclick="document.getElementById('loginDiv').style.display='none'"
+                        class="cancelbtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="registerDiv" class="modal">
+            <div class="modal-content animate">
+                <div class="container">
+                    <table class="form-table">
+                        <tr>
+                            <td><label for="username-register">Benutzername</label></td>
+                            <td><input type="text" id="username-register" placeholder="Benutzername"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password-register">Passwort</label></td>
+                            <td><input type="password" id="password-register" placeholder="Passwort"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="vorname">Vorname</label></td>
+                            <td><input type="text" id="vorname" placeholder="Vorname"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="nachname">Nachname</label></td>
+                            <td><input type="text" id="nachname" placeholder="Nachname"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="email">Email</label></td>
+                            <td><input type="email" id="email" placeholder="Email"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="strasse">Straße</label></td>
+                            <td><input type="text" id="strasse" placeholder="Straße"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="hausnummer">Hausnummer</label></td>
+                            <td><input type="text" id="hausnummer" placeholder="Hausnummer"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="plz">Postleitzahl</label></td>
+                            <td><input type="text" id="plz" placeholder="Postleitzahl"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="ort">Ort</label></td>
+                            <td><input type="text" id="ort" placeholder="Wohnort"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button id="registerBtn" type="button">Register</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="container" style="text-align: center;">
+                    <button type="button" onclick="document.getElementById('registerDiv').style.display='none'"
+                        class="cancelbtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-section" style="display: none" class="w3-container">
+        <p>Herzlich Willkommen <span id="userWelcome">James Bond </span><button id="logoutBtn">Logout</button> <button
+                id="deleteUserBtn" style="color: red;">Delete User</button></p>
+
+        <div class="tab-bar">
+            <button id='angebote-tab' class="tablink active-tab" onclick="changeTab(event,'angebote')">Meine
+                Angebote</button>
+            <button id='suche-tab' class="tablink" onclick="changeTab(event,'suche')">Meine Suchen</button>
+            <button id='uebersicht-tab' class="tablink" onclick="changeTab(event,'karte')">Benutzerübersicht</button>
+        </div>
+
+        <div id="angebote" class="tab-content visible">
+            <h2>Meine Angebote</h2>
+            <div id="offersContainer">
+
+
+            </div>
+
+
+            <hr>
+
+            <h2>Neues Angebot anlegen:</h2>
+            <table class="form-table">
+                <tr>
+                    <td><label for="abfahrtszeit">Abfahrtszeit</label></td>
+                    <td><input type="datetime-local" id="abfahrtszeit"></td>
+                </tr>
+                <tr>
+                    <td><label for="einzugsbereich">Einzugsbereich (km)</label></td>
+                    <td><input type="number" id="einzugsbereich" min="1" value="5"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button id="angebotErstellenBtn" type="button">Angebot anlegen</button></td>
+                </tr>
+            </table>
+        </div>
+        <div id="suche" class="tab-content">
+            <h2>Meine Suchen</h2>
+            <div id="searchContainer">
+
+
+            </div>
+
+            <hr>
+
+            <h2>Neue Suchanfrage anlegen:</h2>
+            <table class="form-table">
+                <tr>
+                    <td><label for="suche-abfahrtszeit">Abfahrtszeit</label></td>
+                    <td><input type="datetime-local" id="suche-abfahrtszeit"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button id="sucheErstellenBtn" type="button">Suche anlegen</button></td>
+                </tr>
+            </table>
+        </div>
+        <div id="karte" class="tab-content">
+            <h2>Benutzer</h2>
+            <div id="map" style="height: 800px; width: 800px;"></div>
+        </div>
+    </div>
+</body>
+
+</html>

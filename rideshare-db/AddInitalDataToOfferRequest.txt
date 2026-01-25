@@ -1,0 +1,3 @@
+docker cp 100_initial_data2.sql swtpRideShare:/tmp/fixed_test_data.sql
+docker exec -it swtpRideShare mysql -u root -p swtp_rideshare
+source /tmp/fixed_test_data.sql

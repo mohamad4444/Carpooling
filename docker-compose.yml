@@ -1,32 +1,32 @@
 services:
   db:
-    build: ./carpooling-db
-    container_name: swtpCarpooling
+    build: ./rideshare-db
+    container_name: rideshare-db
     ports:
       - "3306:3306"
     networks:
-      - carpooling-net
+      - rideshare-net
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 3s
       timeout: 30s
       retries: 10
 
   app:
-    build: ./carpooling-app
-    container_name: carpooling-app
+    build: ./rideshare-app
+    container_name: rideshare-app
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/swtp_carpooling
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/rideshare_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ""
     networks:
-      - carpooling-net
+      - rideshare-net
 
 networks:
-  carpooling-net:
+  rideshare-net:
     driver: bridge

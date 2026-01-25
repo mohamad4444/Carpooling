@@ -1,3 +1,0 @@
-docker cp 100_initial_data2.sql swtpCarpooling:/tmp/fixed_test_data.sql
-docker exec -it swtpCarpooling mysql -u root -p swtp_carpooling
-source /tmp/fixed_test_data.sql

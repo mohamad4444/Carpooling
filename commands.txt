@@ -1,4 +1,4 @@
-carpooling-app
+rideshare-app
 	mvn clean install -DskipTests 
 docker-compose build
 docker-compose up
@@ -10,4 +10,4 @@ Dockerfile
 	ENTRYPOINT ["java", "-jar", "app.jar"]
 Docker-compsoe configuration
 	volumes:
-	  - ./carpooling-app/target/app.jar:/app/app.jar
+	  - ./rideshare-app/target/app.jar:/app/app.jar
