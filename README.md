@@ -17,7 +17,7 @@ The app will be available at [http://localhost:8080](http://localhost:8080).
 
 ### 2. Login & Test Users
 The database is pre-populated with several test users (e.g., `test1`, `test2`, ... `test13`) to demonstrate matching algorithms.
-
+the password for all users is `test`.
 **Note**: To access the system, please **Register** a new user on the login screen. The pre-loaded users are primarily for demonstrating ride matching and proximity features.
 
 ## Project Showcase
